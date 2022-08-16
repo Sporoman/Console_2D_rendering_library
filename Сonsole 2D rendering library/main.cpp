@@ -1,34 +1,36 @@
 ﻿#include "renderSystem.h"
 
-static const int SIZE_Y = 10;
-static const int SIZE_X = 21;
+// Test image for rendering
+
+const int SIZE_Y = 10;
+const int SIZE_X = 20;
 
 const char c_objects_map[SIZE_Y][SIZE_X + 1]
 {
-	"####################",
-	"#                  #",
-	"#         B M  C   #",
-	"#     B   H        #",
-	"#           H      #",
-	"#             ]    #",
-	"#     H      ]     #",
-	"#   C     M        #",
-	"#                  #",
-	"####################"
+	"####             ###",
+	"##H#            ####",
+	"####      B M ######",
+	"####  B   H   ##H###",
+	"####        H  #####",
+	"####          ] ####",
+	"#H##  H      ] #####",
+	"####C     M    #H###",
+	"####           #####",
+	"####             ###"
 };
 
 const char c_background_map[SIZE_Y][SIZE_X + 1]
 {
-	"####################",
-	"#-1234567812345678-#",
-	"#                  #",
-	"#-1234567812345678-#",
-	"#                  #",
-	"#-1234567812345678-#",
-	"#                  #",
-	"#-1234567812345678-#",
-	"#                  #",
-	"####################"
+	"y--yyyyyyyyyyyykkkbB",
+	"y--yyyyyyyyyyyykkbBB",
+	"y---yyyyyyyyyykbbbbB",
+	"y--yyyyyyyyyyykbbbBB",
+	"y---yyyyyyyyyykkbbbB",
+	"y---yyyyyyyyyyykkbbb",
+	"y---yyyyyyyyyykkbbbB",
+	"y--yyyyyyyyyyyykbbbB",
+	"y---yyyyyyyyyyykkbbB",
+	"y---yyyyyyyyyyyyykbb"
 };
 
 unsigned char GetRenderSymbol(unsigned char symbol);
@@ -38,7 +40,7 @@ Color GetColorBackground(unsigned char symbol);
 
 int main()
 {
-	RenderSystem renSys(10,20);
+	RenderSystem renSys(SIZE_Y, SIZE_X);
 
 	// Fulling render map
 	for (int y = 0; y < SIZE_Y; ++y)
@@ -84,7 +86,7 @@ Color GetColorSymbol(unsigned char symbol)
 	switch (symbol)
 	{
 		case ' ':	return Color::black;
-		case 'H':	return Color::yellow;
+		case 'H':	return Color::green;
 		case '#':	return Color::white;
 		case ']':	return Color::blue;
 		case 'B':	return Color::brown;
@@ -101,12 +103,14 @@ Color GetColorBackground(unsigned char symbol)
 	{
 		case '#':
 		case '0':    return Color::black;
-		case '1':    return Color::darkBlue;
+		case 'B':    return Color::darkBlue;
+		case 'b':    return Color::blue;
 		case '2':    return Color::darkGreen;
 		case '3':    return Color::darkCyan;
 		case '4':    return Color::darkRed;
 		case '5':    return Color::darkMagenta;
-		case '6':    return Color::brown;
+		case 'k':    return Color::brown;
+		case 'y':    return Color::yellow;
 		case '7':    return Color::white;
 		case '8':    return Color::gray;
 		case '-':    return Color::darkGray;
