@@ -1,7 +1,9 @@
 ﻿#include "renderSystem.h"
 
-static const int SIZE_Y = 10;
-static const int SIZE_X = 21;
+// Test image for rendering
+
+const int SIZE_Y = 10;
+const int SIZE_X = 20;
 
 const char c_objects_map[SIZE_Y][SIZE_X + 1]
 {
@@ -13,7 +15,7 @@ const char c_objects_map[SIZE_Y][SIZE_X + 1]
 	"#             ]    #",
 	"#     H      ]     #",
 	"#   C     M        #",
-	"#                  #",
+	"#?                 #",
 	"####################"
 };
 
@@ -27,8 +29,8 @@ const char c_background_map[SIZE_Y][SIZE_X + 1]
 	"#-1234567812345678-#",
 	"#                  #",
 	"#-1234567812345678-#",
-	"#                  #",
-	"####################"
+	"-                  #",
+	"-----###############"
 };
 
 unsigned char GetRenderSymbol(unsigned char symbol);
@@ -38,7 +40,7 @@ Color GetColorBackground(unsigned char symbol);
 
 int main()
 {
-	RenderSystem renSys(10,20);
+	RenderSystem renSys(SIZE_Y, SIZE_X);
 
 	// Fulling render map
 	for (int y = 0; y < SIZE_Y; ++y)
