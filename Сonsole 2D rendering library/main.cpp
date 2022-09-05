@@ -47,13 +47,13 @@ int main()
 		for (int x = 0; x < SIZE_X; ++x)
 		{
 			// Draw background
-			renSys.DrawBackground(y, x, GetColorBackground(c_background_map[y][x]));
+			renSys.DrawBkgCharColor(y, x, GetColorBackground(c_background_map[y][x]));
 
 			// Draw map object
 			RenderObject obj;
 			obj.symbol = GetRenderSymbol(c_objects_map[y][x]);
 			obj.symbolColor = GetColorSymbol(c_objects_map[y][x]);
-			obj.backgroundColor = GetColorBackground(c_objects_map[y][x]);
+			obj.bkgColor = GetColorBackground(c_objects_map[y][x]);
 
 			renSys.DrawChar(y, x, obj);
 		}
