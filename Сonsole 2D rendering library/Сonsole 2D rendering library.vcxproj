@@ -24,6 +24,7 @@
     <ProjectGuid>{8fed36fb-1230-4b83-8309-65b06ac3f8c2}</ProjectGuid>
     <RootNamespace>Сonsole2Drenderinglibrary</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Console 2D rendering library</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
