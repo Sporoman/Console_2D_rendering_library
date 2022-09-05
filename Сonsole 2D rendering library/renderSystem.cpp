@@ -15,9 +15,9 @@ RenderSystem::RenderSystem(const int screenY, const int screenX)
 
 		for (int x = 0; x < _screenX; ++x)
 		{
-			_backBuffer[y][x].symbol = 0;
+			_backBuffer[y][x].symbol      = 0;
 			_backBuffer[y][x].symbolColor = Color::gray;
-			_backBuffer[y][x].backgroundColor = Color::black;
+			_backBuffer[y][x].bkgColor    = Color::black;
 
 			_screenBuffer[y][x] = _backBuffer[y][x];
 		}
@@ -50,9 +50,9 @@ void RenderSystem::Clear()
 	for (int y = 0; y < _screenY; ++y)
 		for (int x = 0; x < _screenX; ++x)
 		{
-			_backBuffer[y][x].symbol          = 0;
-			_backBuffer[y][x].symbolColor     = Color::black;
-			_backBuffer[y][x].backgroundColor = Color::black;
+			_backBuffer[y][x].symbol      = 0;
+			_backBuffer[y][x].symbolColor = Color::black;
+			_backBuffer[y][x].bkgColor    = Color::black;
 		}
 }
 
@@ -65,26 +65,35 @@ void RenderSystem::DrawChar(int y, int x, const RenderObject& obj)
 	_backBuffer[y][x].symbolColor = obj.symbolColor;
 
 	// If the object has a black background, it is not rendered(= transparent)
-	if (obj.backgroundColor != Color::black)
-		_backBuffer[y][x].backgroundColor = obj.backgroundColor;
+	if (obj.bkgColor != Color::black)
+		_backBuffer[y][x].bkgColor = obj.bkgColor;
 }
 
-void RenderSystem::DrawBackground(int y, int x, Color backgroundColor)
+void RenderSystem::DrawFrontChar(int y, int x, const RenderObject& obj)
 {
 	if (y < 0 || x < 0 || y >= _screenY || x >= _screenX)
 		return;
 
-	_backBuffer[y][x].backgroundColor = backgroundColor;
+	_backBuffer[y][x].symbol      = obj.symbol;
+	_backBuffer[y][x].symbolColor = obj.symbolColor;
 }
 
-void RenderSystem::SendText(int y, int x, const char* text, Color symbolColor, Color backgroundColor)
+void RenderSystem::DrawBkgCharColor(int y, int x, Color bkgColor)
+{
+	if (y < 0 || x < 0 || y >= _screenY || x >= _screenX)
+		return;
+
+	_backBuffer[y][x].bkgColor = bkgColor;
+}
+
+void RenderSystem::SendText(int y, int x, const char* text, Color symbolColor, Color bkgColor)
 {
 	int next_x = x;
 	unsigned char symbol = *text;
 
 	while (symbol != 0)
 	{
-		DrawChar(y, next_x, RenderObject{symbol, symbolColor, backgroundColor });
+		DrawChar(y, next_x, RenderObject{symbol, symbolColor, bkgColor });
 
 		++text;
 		++next_x;
@@ -108,7 +117,7 @@ void RenderSystem::Render()
 
 				// Draw symbol in (y, x) position
 				SetCursor(y, x);
-				SetColor(_screenBuffer[y][x].symbolColor, _screenBuffer[y][x].backgroundColor);
+				SetColor(_screenBuffer[y][x].symbolColor, _screenBuffer[y][x].bkgColor);
 				printf("%c", _screenBuffer[y][x].symbol);
 
 				screenBufferModified = true;
@@ -117,18 +126,18 @@ void RenderSystem::Render()
 
 bool RenderSystem::CompareBuffers(const RenderObject* buf_1, const RenderObject* buf_2) const
 {
-	if (  (buf_1->symbol != buf_2->symbol)
+	if (  (buf_1->symbol      != buf_2->symbol)
 	   || (buf_1->symbolColor != buf_2->symbolColor)
-	   || (buf_1->backgroundColor != buf_2->backgroundColor)
+	   || (buf_1->bkgColor    != buf_2->bkgColor)
 	   )
 		return true;
 	else
 		return false;
 }
 
-void RenderSystem::SetColor(Color symbolColor, Color backgroundColor)
+void RenderSystem::SetColor(Color symbolColor, Color bkgColor)
 {
-	int consoleColor = static_cast<int>(symbolColor) | static_cast<int>(backgroundColor) << 4;
+	int consoleColor = static_cast<int>(symbolColor) | static_cast<int>(bkgColor) << 4;
 	SetConsoleTextAttribute(_consoleHandle, consoleColor);
 }
 
@@ -138,10 +147,9 @@ void RenderSystem::SetColor(Color symbolColor)
 	SetConsoleTextAttribute(_consoleHandle, consoleColor);
 }
 
-void RenderSystem::SetDefault()
+void RenderSystem::SetDefaultColor()
 {
-	int consoleColor = static_cast<int>(Color::gray) | static_cast<int>(Color::black) << 4;
-	SetConsoleTextAttribute(_consoleHandle, consoleColor);
+	SetColor(Color::gray, Color::black);
 }
 
 void RenderSystem::SetCursor(int Y, int X)
